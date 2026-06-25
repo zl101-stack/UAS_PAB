@@ -1,5 +1,6 @@
 package edu.uph.m24si2.uas_pab;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -71,22 +72,14 @@ public class LoginActivity extends AppCompatActivity {
         });
 
 
-        // Event tombol Daftar
+        // Event tombol Daftar → navigasi ke RegisterActivity
         btnRegister.setOnClickListener(v -> {
 
-            Toast.makeText(
-                    LoginActivity.this,
-                    "Menuju Halaman Register",
-                    Toast.LENGTH_SHORT
-            ).show();
-
-            /*
             Intent intent = new Intent(
                     LoginActivity.this,
                     RegisterActivity.class
             );
             startActivity(intent);
-            */
 
         });
 
