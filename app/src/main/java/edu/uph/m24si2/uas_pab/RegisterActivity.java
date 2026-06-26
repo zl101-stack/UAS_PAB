@@ -2,12 +2,15 @@ package edu.uph.m24si2.uas_pab;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import edu.uph.m24si2.uas_pab.db.UserRepository;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -94,7 +97,28 @@ public class RegisterActivity extends AppCompatActivity {
                 return;
             }
 
-            // Simulasi registrasi berhasil
+            // Simpan ke Realm database
+            String error = UserRepository.registerUser(nama, email, phone, password);
+
+            if (error != null) {
+                // Registrasi gagal (misal email sudah terdaftar)
+                Log.e("USER_REGISTER", "Registrasi GAGAL: " + error);
+                etEmail.setError(error);
+                etEmail.requestFocus();
+                return;
+            }
+
+            // Registrasi berhasil — verifikasi data tersimpan
+            Log.d("USER_REGISTER", "=== REGISTRASI BERHASIL ===");
+            Log.d("USER_REGISTER", "Nama  : " + nama);
+            Log.d("USER_REGISTER", "Email : " + email);
+            Log.d("USER_REGISTER", "Phone : " + phone);
+
+            // Cek total user setelah register
+            java.util.List<edu.uph.m24si2.uas_pab.model.User> allUsers = edu.uph.m24si2.uas_pab.db.UserRepository.getAllUsers();
+            Log.d("USER_REGISTER", "Total user di DB sekarang: " + allUsers.size());
+
+            // Registrasi berhasil
             Toast.makeText(
                     RegisterActivity.this,
                     "Registrasi Berhasil! Silakan Login.",

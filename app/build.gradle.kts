@@ -1,19 +1,16 @@
 plugins {
     alias(libs.plugins.android.application)
+    id("realm-android")
 }
 
 android {
     namespace = "edu.uph.m24si2.uas_pab"
-    compileSdk {
-        version = release(36) {
-            minorApiLevel = 1
-        }
-    }
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "edu.uph.m24si2.uas_pab"
         minSdk = 30
-        targetSdk = 36
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
