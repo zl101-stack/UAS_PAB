@@ -87,7 +87,7 @@ public class LoginActivity extends AppCompatActivity {
             ).show();
 
             // Arahkan ke MainActivity (Dashboard)
-            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            Intent intent = new Intent(LoginActivity.this, dashboard.class);
             intent.putExtra("USER_EMAIL", user.getEmail());
             intent.putExtra("USER_NAMA", user.getNama());
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
