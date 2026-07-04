@@ -2,4 +2,13 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- Pemasukan (Income) -->
+    <color name="income_green">#16A34A</color>
+    <color name="income_icon_bg">#DCFCE7</color>
+    <color name="income_header">#1A56DB</color>
+
+    <!-- Pengeluaran (Expense) -->
+    <color name="expense_red">#DC2626</color>
+    <color name="expense_icon_bg">#FEE2E2</color>
 </resources>
