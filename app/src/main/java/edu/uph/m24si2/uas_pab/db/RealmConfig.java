@@ -11,7 +11,7 @@ import io.realm.RealmConfiguration;
 public class RealmConfig {
 
     private static final String DB_NAME    = "keuangan.realm";
-    private static final long   DB_VERSION = 1;
+    private static final long   DB_VERSION = 2;
 
     /**
      * Inisialisasi Realm. Harus dipanggil sebelum Realm.getDefaultInstance() digunakan.
