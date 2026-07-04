@@ -1,10 +1,29 @@
 <resources>
-    <string name="app_name">UAS_PAB</string>
-    <!-- Strings used for fragments for navigation -->
+    <string name="app_name">Dana Bijak</string>
+    <!-- Fragments navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
+
+    <!-- Pemasukan -->
+    <string name="title_pemasukan">Pemasukan</string>
+    <string name="hint_jumlah">Rp 0</string>
+    <string name="hint_kategori">Pilih kategori</string>
+    <string name="hint_tanggal">DD/MM/YYYY</string>
+    <string name="hint_catatan">Tambah catatan...</string>
+    <string name="msg_simpan_berhasil">Transaksi berhasil disimpan</string>
+    <string name="msg_hapus_berhasil">Transaksi dihapus</string>
+
+    <!-- Pengeluaran -->
+    <string name="title_pengeluaran">Pengeluaran</string>
+
+    <!-- Profile -->
+    <string name="title_profil">Profil Saya</string>
+    <string name="btn_simpan_profil">SIMPAN PROFIL</string>
+    <string name="btn_logout">KELUAR</string>
+    <string name="msg_profil_disimpan">Profil berhasil disimpan</string>
+    <string name="konfirmasi_logout">Yakin ingin keluar dari akun ini?</string>
 
     <string name="lorem_ipsum">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris

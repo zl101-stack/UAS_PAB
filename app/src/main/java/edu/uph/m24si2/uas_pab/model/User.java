@@ -11,7 +11,7 @@ import io.realm.annotations.Required;
 public class User extends RealmObject {
 
     @PrimaryKey
-    private String email;   // Email sebagai primary key (unik per pengguna)
+    private String email;       // Email sebagai primary key (unik per pengguna)
 
     @Required
     private String nama;
@@ -21,6 +21,12 @@ public class User extends RealmObject {
 
     @Required
     private String password;
+
+    // --- Profil tambahan ---
+    private String username;    // Username unik (opsional)
+    private String photoUri;    // URI foto profil dari galeri
+    private String birthDate;   // Tanggal lahir (format: dd/MM/yyyy)
+    private int    birthYear;   // Tahun lahir
 
     // Constructor kosong wajib ada untuk Realm
     public User() {}
@@ -45,4 +51,16 @@ public class User extends RealmObject {
 
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
+
+    public String getUsername() { return username; }
+    public void setUsername(String username) { this.username = username; }
+
+    public String getPhotoUri() { return photoUri; }
+    public void setPhotoUri(String photoUri) { this.photoUri = photoUri; }
+
+    public String getBirthDate() { return birthDate; }
+    public void setBirthDate(String birthDate) { this.birthDate = birthDate; }
+
+    public int getBirthYear() { return birthYear; }
+    public void setBirthYear(int birthYear) { this.birthYear = birthYear; }
 }

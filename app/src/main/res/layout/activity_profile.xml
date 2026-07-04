@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#F4F6F9">
+
+    <!-- HEADER -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="#1A56DB"
+        android:paddingHorizontal="16dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp">
+
+        <ImageButton
+            android:id="@+id/btnBack"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@android:drawable/ic_media_previous"
+            android:contentDescription="Kembali"
+            app:tint="#FFFFFF"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Profil Saya"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginStart="8dp"/>
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="20dp"
+            android:paddingTop="28dp"
+            android:paddingBottom="32dp">
+
+            <!-- FOTO PROFIL -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_marginBottom="32dp">
+
+                <!-- Lingkaran foto -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    app:cardCornerRadius="50dp"
+                    app:cardElevation="4dp"
+                    app:cardBackgroundColor="#E0E7FF">
+
+                    <ImageView
+                        android:id="@+id/ivProfilePhoto"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:src="@android:drawable/ic_menu_edit"
+                        android:contentDescription="Foto profil"/>
+                </androidx.cardview.widget.CardView>
+
+                <!-- Tombol ganti foto -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnGantiFoto"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:text="Ganti Foto"
+                    android:textSize="12sp"
+                    android:layout_marginTop="12dp"
+                    app:strokeColor="#1A56DB"
+                    android:textColor="#1A56DB"/>
+            </LinearLayout>
+
+            <!-- SECTION: Informasi Akun -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Informasi Akun"
+                android:textColor="#1E293B"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="10dp"/>
+
+            <!-- Nama Lengkap -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Nama Lengkap"
+                android:textSize="12sp"
+                android:textColor="#64748B"
+                android:layout_marginBottom="4dp"/>
+            <EditText
+                android:id="@+id/etNama"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="Masukkan nama lengkap"
+                android:inputType="textPersonName"
+                android:background="@drawable/bg_edittext"
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp"
+                android:textSize="14sp"
+                android:textColor="#222222"
+                android:textColorHint="#AAAAAA"
+                android:layout_marginBottom="14dp"/>
+
+            <!-- Username -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Username"
+                android:textSize="12sp"
+                android:textColor="#64748B"
+                android:layout_marginBottom="4dp"/>
+            <EditText
+                android:id="@+id/etUsername"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="@username"
+                android:inputType="textNoSuggestions"
+                android:background="@drawable/bg_edittext"
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp"
+                android:textSize="14sp"
+                android:textColor="#222222"
+                android:textColorHint="#AAAAAA"
+                android:layout_marginBottom="14dp"/>
+
+            <!-- Email (read-only) -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Email"
+                android:textSize="12sp"
+                android:textColor="#64748B"
+                android:layout_marginBottom="4dp"/>
+            <EditText
+                android:id="@+id/etEmail"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="email@contoh.com"
+                android:inputType="textEmailAddress"
+                android:background="@drawable/bg_edittext"
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp"
+                android:textSize="14sp"
+                android:textColor="#64748B"
+                android:textColorHint="#AAAAAA"
+                android:focusable="false"
+                android:cursorVisible="false"
+                android:alpha="0.7"
+                android:layout_marginBottom="14dp"/>
+
+            <!-- Nomor HP -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Nomor HP"
+                android:textSize="12sp"
+                android:textColor="#64748B"
+                android:layout_marginBottom="4dp"/>
+            <EditText
+                android:id="@+id/etPhone"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="08xxxxxxxxxx"
+                android:inputType="phone"
+                android:background="@drawable/bg_edittext"
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp"
+                android:textSize="14sp"
+                android:textColor="#222222"
+                android:textColorHint="#AAAAAA"
+                android:layout_marginBottom="24dp"/>
+
+            <!-- SECTION: Informasi Pribadi -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Informasi Pribadi"
+                android:textColor="#1E293B"
+                android:textSize="13sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="10dp"/>
+
+            <!-- Tanggal Lahir -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Tanggal Lahir"
+                android:textSize="12sp"
+                android:textColor="#64748B"
+                android:layout_marginBottom="4dp"/>
+            <EditText
+                android:id="@+id/etBirthDate"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="DD/MM/YYYY"
+                android:background="@drawable/bg_edittext"
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp"
+                android:textSize="14sp"
+                android:textColor="#222222"
+                android:textColorHint="#AAAAAA"
+                android:focusable="false"
+                android:clickable="true"
+                android:cursorVisible="false"
+                android:drawableEnd="@android:drawable/ic_menu_my_calendar"
+                android:layout_marginBottom="14dp"/>
+
+            <!-- Tahun Lahir -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Tahun Lahir"
+                android:textSize="12sp"
+                android:textColor="#64748B"
+                android:layout_marginBottom="4dp"/>
+            <EditText
+                android:id="@+id/etBirthYear"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:hint="contoh: 1995"
+                android:inputType="number"
+                android:background="@drawable/bg_edittext"
+                android:paddingStart="14dp"
+                android:paddingEnd="14dp"
+                android:textSize="14sp"
+                android:textColor="#222222"
+                android:textColorHint="#AAAAAA"
+                android:layout_marginBottom="28dp"/>
+
+            <!-- Tombol Simpan -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSimpan"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:text="SIMPAN PROFIL"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                app:backgroundTint="#1A56DB"
+                android:layout_marginBottom="12dp"/>
+
+            <!-- Tombol Logout -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnLogout"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:text="KELUAR"
+                android:textColor="#EF4444"
+                android:textStyle="bold"
+                android:textSize="14sp"
+                app:strokeColor="#EF4444"/>
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

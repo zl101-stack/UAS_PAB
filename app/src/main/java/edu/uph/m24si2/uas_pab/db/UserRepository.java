@@ -97,4 +97,58 @@ public class UserRepository {
             realm.close();
         }
     }
+
+    /**
+     * Memperbarui data profil pengguna.
+     *
+     * @param email     Email (primary key, tidak bisa diubah)
+     * @param nama      Nama lengkap baru
+     * @param username  Username baru
+     * @param phone     Nomor HP baru
+     * @param birthDate Tanggal lahir baru (dd/MM/yyyy)
+     * @param birthYear Tahun lahir baru
+     * @param photoUri  URI foto profil baru (boleh null)
+     */
+    public static void updateProfile(String email, String nama, String username,
+                                     String phone, String birthDate,
+                                     int birthYear, String photoUri) {
+        Realm realm = Realm.getDefaultInstance();
+        try {
+            realm.executeTransaction(r -> {
+                User user = r.where(User.class)
+                        .equalTo("email", email)
+                        .findFirst();
+                if (user != null) {
+                    user.setNama(nama);
+                    user.setUsername(username);
+                    user.setPhone(phone);
+                    user.setBirthDate(birthDate);
+                    user.setBirthYear(birthYear);
+                    if (photoUri != null) user.setPhotoUri(photoUri);
+                }
+            });
+        } finally {
+            realm.close();
+        }
+    }
+
+    /**
+     * Memperbarui hanya URI foto profil pengguna.
+     *
+     * @param email    Email pemilik akun
+     * @param photoUri URI foto baru
+     */
+    public static void updatePhotoUri(String email, String photoUri) {
+        Realm realm = Realm.getDefaultInstance();
+        try {
+            realm.executeTransaction(r -> {
+                User user = r.where(User.class)
+                        .equalTo("email", email)
+                        .findFirst();
+                if (user != null) user.setPhotoUri(photoUri);
+            });
+        } finally {
+            realm.close();
+        }
+    }
 }

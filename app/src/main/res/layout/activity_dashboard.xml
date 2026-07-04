@@ -91,14 +91,35 @@
                 android:orientation="vertical"
                 android:padding="24dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <!-- Baris label + ikon mata -->
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Total Saldo Efektif"
-                    android:textColor="#BFDBFE"
-                    android:textSize="14sp" />
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
 
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Total Saldo Saat Ini"
+                        android:textColor="#BFDBFE"
+                        android:textSize="14sp"/>
+
+                    <!-- Tombol mata buka/tutup saldo -->
+                    <ImageButton
+                        android:id="@+id/btnToggleSaldo"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:src="@drawable/ic_eye_open"
+                        android:contentDescription="Tampilkan/Sembunyikan Saldo"
+                        app:tint="#BFDBFE"/>
+                </LinearLayout>
+
+                <!-- Nilai saldo -->
                 <TextView
+                    android:id="@+id/tvSaldo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Rp 0"
@@ -106,6 +127,97 @@
                     android:textSize="32sp"
                     android:textStyle="bold"
                     android:layout_marginTop="8dp"/>
+
+                <!-- Baris pemasukan vs pengeluaran -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="16dp">
+
+                    <!-- Pemasukan ringkasan -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <ImageView
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
+                            android:src="@android:drawable/arrow_up_float"
+                            app:tint="#86EFAC"/>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_marginStart="6dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Pemasukan"
+                                android:textColor="#BFDBFE"
+                                android:textSize="11sp"/>
+
+                            <TextView
+                                android:id="@+id/tvRingkasanPemasukan"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Rp 0"
+                                android:textColor="#FFFFFF"
+                                android:textSize="13sp"
+                                android:textStyle="bold"/>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!-- Divider vertikal -->
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:background="#3B82F6"
+                        android:layout_marginHorizontal="8dp"/>
+
+                    <!-- Pengeluaran ringkasan -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <ImageView
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
+                            android:src="@android:drawable/arrow_down_float"
+                            app:tint="#FCA5A5"/>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_marginStart="6dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Pengeluaran"
+                                android:textColor="#BFDBFE"
+                                android:textSize="11sp"/>
+
+                            <TextView
+                                android:id="@+id/tvRingkasanPengeluaran"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Rp 0"
+                                android:textColor="#FFFFFF"
+                                android:textSize="13sp"
+                                android:textStyle="bold"/>
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
@@ -118,22 +230,21 @@
             android:textStyle="bold"
             android:layout_marginBottom="16dp" />
 
-        <!-- GRID MENU -->
-        <GridLayout
+        <!-- GRID MENU — menggunakan LinearLayout rows agar bisa scroll sempurna -->
+
+        <!-- Baris 1: Pemasukan & Pengeluaran -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:alignmentMode="alignMargins"
-            android:columnCount="2"
-            android:rowCount="4"
-            android:columnOrderPreserved="false">
+            android:orientation="horizontal"
+            android:layout_marginBottom="12dp">
 
-            <!-- 1. Input Pemasukan -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardPemasukan"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                android:layout_margin="6dp"
+                android:layout_weight="1"
+                android:layout_marginEnd="6dp"
                 app:cardBackgroundColor="#FFFFFF"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="2dp">
@@ -159,13 +270,12 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- 2. Input Pengeluaran -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardPengeluaran"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                android:layout_margin="6dp"
+                android:layout_weight="1"
+                android:layout_marginStart="6dp"
                 app:cardBackgroundColor="#FFFFFF"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="2dp">
@@ -190,14 +300,21 @@
                         android:textSize="13sp"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
+        </LinearLayout>
 
-            <!-- 3. Budget Bulanan -->
+        <!-- Baris 2: Budget & Tabungan -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="12dp">
+
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardBudget"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                android:layout_margin="6dp"
+                android:layout_weight="1"
+                android:layout_marginEnd="6dp"
                 app:cardBackgroundColor="#FFFFFF"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="2dp">
@@ -223,13 +340,12 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- 4. Target Tabungan -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardTargetTabungan"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                android:layout_margin="6dp"
+                android:layout_weight="1"
+                android:layout_marginStart="6dp"
                 app:cardBackgroundColor="#FFFFFF"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="2dp">
@@ -254,14 +370,21 @@
                         android:textSize="13sp"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
+        </LinearLayout>
 
-            <!-- 5. Grafik Keuangan -->
+        <!-- Baris 3: Grafik & Notifikasi -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="12dp">
+
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardGrafik"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                android:layout_margin="6dp"
+                android:layout_weight="1"
+                android:layout_marginEnd="6dp"
                 app:cardBackgroundColor="#FFFFFF"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="2dp">
@@ -287,13 +410,12 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- 6. Notifikasi -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardNotifikasi"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                android:layout_margin="6dp"
+                android:layout_weight="1"
+                android:layout_marginStart="6dp"
                 app:cardBackgroundColor="#FFFFFF"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="2dp">
@@ -318,14 +440,21 @@
                         android:textSize="13sp"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
+        </LinearLayout>
 
-            <!-- 7. Profile -->
+        <!-- Baris 4: Profile & Edukasi -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="12dp">
+
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardProfile"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                android:layout_margin="6dp"
+                android:layout_weight="1"
+                android:layout_marginEnd="6dp"
                 app:cardBackgroundColor="#FFFFFF"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="2dp">
@@ -351,13 +480,12 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- 8. Video Edukasi -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardVideo"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                android:layout_margin="6dp"
+                android:layout_weight="1"
+                android:layout_marginStart="6dp"
                 app:cardBackgroundColor="#FFFFFF"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="2dp">
@@ -382,7 +510,6 @@
                         android:textSize="13sp"/>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
-
-        </GridLayout>
+        </LinearLayout>
     </LinearLayout>
 </ScrollView>
