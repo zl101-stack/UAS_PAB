@@ -15,6 +15,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.UAS_PAB">
         <activity
+            android:name=".BudgetActivity"
+            android:exported="false" />
+        <activity
             android:name=".dashboard"
             android:exported="false" />
         <activity
@@ -36,15 +39,15 @@
         <activity
             android:name=".PemasukanActivity"
             android:exported="false"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".PengeluaranActivity"
             android:exported="false"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".ProfileActivity"
             android:exported="false"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize" />
     </application>
 
 </manifest>

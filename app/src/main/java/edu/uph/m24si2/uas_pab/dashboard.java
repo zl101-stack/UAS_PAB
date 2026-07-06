@@ -81,8 +81,13 @@ public class dashboard extends AppCompatActivity {
             startActivity(i);
         });
 
-        cardBudget.setOnClickListener(v ->
-                Toast.makeText(this, "Fitur Budget Bulanan", Toast.LENGTH_SHORT).show());
+        // ── BAGIAN YANG DIGANTI: Navigasi ke Halaman Budget ────────────────────
+        cardBudget.setOnClickListener(v -> {
+            Intent i = new Intent(this, BudgetActivity.class);
+            i.putExtra("USER_EMAIL", userEmail); // Mengirim email pengguna ke halaman budget
+            startActivity(i);
+        });
+        // ────────────────────────────────────────────────────────────────────────
 
         cardTargetTabungan.setOnClickListener(v ->
                 Toast.makeText(this, "Fitur Target Tabungan", Toast.LENGTH_SHORT).show());
