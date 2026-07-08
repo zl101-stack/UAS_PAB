@@ -1,189 +1,402 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.drawerlayout.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/drawerLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="#F4F6F9">
+    android:layout_height="match_parent">
 
-    <!-- HEADER -->
+    <!-- ═══════════ KONTEN UTAMA ═══════════ -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
-        android:background="#1A56DB"
-        android:paddingTop="16dp"
-        android:paddingBottom="20dp"
-        android:paddingHorizontal="16dp"
-        android:elevation="4dp">
+        android:background="#F4F6F9">
 
-        <!-- Baris atas: back + judul + tandai semua -->
+        <!-- HEADER -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:orientation="vertical"
+            android:background="#1A56DB"
+            android:paddingTop="16dp"
+            android:paddingBottom="20dp"
+            android:paddingHorizontal="16dp"
+            android:elevation="4dp">
 
-            <ImageView
-                android:id="@+id/btnBack"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:src="@drawable/ic_back"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:clickable="true"
-                android:focusable="true"
-                android:contentDescription="Kembali"/>
+            <!-- Baris atas: back + judul + ikon sidebar -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:id="@+id/btnBack"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:src="@drawable/ic_back"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:contentDescription="Kembali"/>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Notifikasi"
+                    android:textColor="#FFFFFF"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:layout_marginStart="8dp"/>
+
+                <!-- Tandai semua dibaca -->
+                <TextView
+                    android:id="@+id/tvTandaiSemua"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tandai Dibaca"
+                    android:textColor="#BFDBFE"
+                    android:textSize="12sp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:paddingVertical="4dp"
+                    android:layout_marginEnd="12dp"/>
+
+                <!-- Ikon buka sidebar -->
+                <TextView
+                    android:id="@+id/btnOpenSidebar"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:gravity="center"
+                    android:text="☰"
+                    android:textColor="#FFFFFF"
+                    android:textSize="20sp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:focusable="true"/>
+            </LinearLayout>
+
+            <!-- Badge jumlah belum dibaca -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="44dp">
+
+                <View
+                    android:layout_width="8dp"
+                    android:layout_height="8dp"
+                    android:background="@drawable/bg_dot_merah"/>
+
+                <TextView
+                    android:id="@+id/tvJumlahBelumDibaca"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="5 notifikasi belum dibaca"
+                    android:textColor="#BFDBFE"
+                    android:textSize="12sp"
+                    android:layout_marginStart="6dp"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- FILTER CHIP GROUP -->
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="none"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="12dp"
+            android:background="#FFFFFF"
+            android:elevation="2dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/chipSemua"
+                    android:layout_width="wrap_content"
+                    android:layout_height="32dp"
+                    android:text="Semua"
+                    android:gravity="center"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF"
+                    android:background="@drawable/bg_chip_aktif"
+                    android:paddingHorizontal="16dp"
+                    android:layout_marginEnd="8dp"
+                    android:clickable="true"
+                    android:focusable="true"/>
+
+                <TextView
+                    android:id="@+id/chipPeringatan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="32dp"
+                    android:text="⚠ Peringatan"
+                    android:gravity="center"
+                    android:textSize="12sp"
+                    android:textColor="#64748B"
+                    android:background="@drawable/bg_chip_nonaktif"
+                    android:paddingHorizontal="16dp"
+                    android:layout_marginEnd="8dp"
+                    android:clickable="true"
+                    android:focusable="true"/>
+
+                <TextView
+                    android:id="@+id/chipInfo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="32dp"
+                    android:text="ℹ Info"
+                    android:gravity="center"
+                    android:textSize="12sp"
+                    android:textColor="#64748B"
+                    android:background="@drawable/bg_chip_nonaktif"
+                    android:paddingHorizontal="16dp"
+                    android:layout_marginEnd="8dp"
+                    android:clickable="true"
+                    android:focusable="true"/>
+
+                <TextView
+                    android:id="@+id/chipSukses"
+                    android:layout_width="wrap_content"
+                    android:layout_height="32dp"
+                    android:text="✓ Sukses"
+                    android:gravity="center"
+                    android:textSize="12sp"
+                    android:textColor="#64748B"
+                    android:background="@drawable/bg_chip_nonaktif"
+                    android:paddingHorizontal="16dp"
+                    android:layout_marginEnd="8dp"
+                    android:clickable="true"
+                    android:focusable="true"/>
+
+                <TextView
+                    android:id="@+id/chipTips"
+                    android:layout_width="wrap_content"
+                    android:layout_height="32dp"
+                    android:text="💡 Tips"
+                    android:gravity="center"
+                    android:textSize="12sp"
+                    android:textColor="#64748B"
+                    android:background="@drawable/bg_chip_nonaktif"
+                    android:paddingHorizontal="16dp"
+                    android:clickable="true"
+                    android:focusable="true"/>
+            </LinearLayout>
+        </HorizontalScrollView>
+
+        <!-- LIST NOTIFIKASI -->
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:scrollbars="none"
+            android:paddingTop="12dp"
+            android:clipToPadding="false">
+
+            <LinearLayout
+                android:id="@+id/llNotifikasiContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="24dp"/>
+        </ScrollView>
+    </LinearLayout>
+
+    <!-- ═══════════ SIDEBAR KANAN ═══════════ -->
+    <LinearLayout
+        android:id="@+id/navSidebar"
+        android:layout_width="260dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="end"
+        android:orientation="vertical"
+        android:background="#FFFFFF"
+        android:elevation="8dp">
+
+        <!-- Header sidebar -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#1A56DB"
+            android:paddingHorizontal="20dp"
+            android:paddingTop="24dp"
+            android:paddingBottom="20dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Kelola Notifikasi"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Filter &amp; tindakan cepat"
+                android:textColor="#BFDBFE"
+                android:textSize="12sp"
+                android:layout_marginTop="2dp"/>
+        </LinearLayout>
+
+        <!-- Divider -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#F1F5F9"/>
+
+        <!-- Menu sidebar: Semua -->
+        <LinearLayout
+            android:id="@+id/sidebarSemua"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="20dp"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true">
+
+            <TextView
+                android:layout_width="28dp"
+                android:layout_height="wrap_content"
+                android:text="🔔"
+                android:textSize="18sp"
+                android:gravity="center"/>
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Notifikasi"
-                android:textColor="#FFFFFF"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:layout_marginStart="8dp"/>
+                android:text="Semua Notifikasi"
+                android:textColor="#0F172A"
+                android:textSize="14sp"
+                android:layout_marginStart="12dp"/>
 
             <TextView
-                android:id="@+id/tvTandaiSemua"
+                android:id="@+id/sidebarBadgeSemua"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Tandai Dibaca"
-                android:textColor="#BFDBFE"
-                android:textSize="12sp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:clickable="true"
-                android:focusable="true"
-                android:paddingVertical="4dp"/>
+                android:textColor="#FFFFFF"
+                android:textSize="11sp"
+                android:background="@drawable/bg_badge_baru"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="2dp"/>
         </LinearLayout>
 
-        <!-- Badge jumlah belum dibaca -->
+        <!-- Menu sidebar: Dibintangi -->
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/sidebarDibintangi"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:layout_marginTop="8dp"
-            android:layout_marginStart="44dp">
-
-            <View
-                android:layout_width="8dp"
-                android:layout_height="8dp"
-                android:background="@drawable/bg_dot_merah"/>
+            android:paddingHorizontal="20dp"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true">
 
             <TextView
-                android:id="@+id/tvJumlahBelumDibaca"
+                android:layout_width="28dp"
+                android:layout_height="wrap_content"
+                android:text="⭐"
+                android:textSize="18sp"
+                android:gravity="center"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Dibintangi"
+                android:textColor="#0F172A"
+                android:textSize="14sp"
+                android:layout_marginStart="12dp"/>
+
+            <TextView
+                android:id="@+id/sidebarBadgeBintang"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="5 notifikasi belum dibaca"
-                android:textColor="#BFDBFE"
-                android:textSize="12sp"
-                android:layout_marginStart="6dp"/>
+                android:textColor="#FFFFFF"
+                android:textSize="11sp"
+                android:background="@drawable/bg_badge_bintang"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="2dp"
+                android:visibility="gone"/>
         </LinearLayout>
+
+        <!-- Divider -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#F1F5F9"
+            android:layout_marginVertical="4dp"/>
+
+        <!-- Menu sidebar: Hapus Semua -->
+        <LinearLayout
+            android:id="@+id/sidebarHapusSemua"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="20dp"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true">
+
+            <TextView
+                android:layout_width="28dp"
+                android:layout_height="wrap_content"
+                android:text="🗑"
+                android:textSize="18sp"
+                android:gravity="center"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Hapus Semua"
+                android:textColor="#EF4444"
+                android:textSize="14sp"
+                android:layout_marginStart="12dp"/>
+        </LinearLayout>
+
+        <!-- Menu sidebar: Tandai Semua Dibaca -->
+        <LinearLayout
+            android:id="@+id/sidebarTandaiSemua"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="20dp"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true">
+
+            <TextView
+                android:layout_width="28dp"
+                android:layout_height="wrap_content"
+                android:text="✓"
+                android:textSize="18sp"
+                android:textColor="#16A34A"
+                android:gravity="center"/>
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Tandai Semua Dibaca"
+                android:textColor="#0F172A"
+                android:textSize="14sp"
+                android:layout_marginStart="12dp"/>
+        </LinearLayout>
+
     </LinearLayout>
 
-    <!-- FILTER CHIP GROUP -->
-    <HorizontalScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scrollbars="none"
-        android:paddingHorizontal="16dp"
-        android:paddingVertical="12dp"
-        android:background="#FFFFFF"
-        android:elevation="2dp">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/chipSemua"
-                android:layout_width="wrap_content"
-                android:layout_height="32dp"
-                android:text="Semua"
-                android:gravity="center"
-                android:textSize="12sp"
-                android:textStyle="bold"
-                android:textColor="#FFFFFF"
-                android:background="@drawable/bg_chip_aktif"
-                android:paddingHorizontal="16dp"
-                android:layout_marginEnd="8dp"
-                android:clickable="true"
-                android:focusable="true"/>
-
-            <TextView
-                android:id="@+id/chipPeringatan"
-                android:layout_width="wrap_content"
-                android:layout_height="32dp"
-                android:text="⚠ Peringatan"
-                android:gravity="center"
-                android:textSize="12sp"
-                android:textColor="#64748B"
-                android:background="@drawable/bg_chip_nonaktif"
-                android:paddingHorizontal="16dp"
-                android:layout_marginEnd="8dp"
-                android:clickable="true"
-                android:focusable="true"/>
-
-            <TextView
-                android:id="@+id/chipInfo"
-                android:layout_width="wrap_content"
-                android:layout_height="32dp"
-                android:text="ℹ Info"
-                android:gravity="center"
-                android:textSize="12sp"
-                android:textColor="#64748B"
-                android:background="@drawable/bg_chip_nonaktif"
-                android:paddingHorizontal="16dp"
-                android:layout_marginEnd="8dp"
-                android:clickable="true"
-                android:focusable="true"/>
-
-            <TextView
-                android:id="@+id/chipSukses"
-                android:layout_width="wrap_content"
-                android:layout_height="32dp"
-                android:text="✓ Sukses"
-                android:gravity="center"
-                android:textSize="12sp"
-                android:textColor="#64748B"
-                android:background="@drawable/bg_chip_nonaktif"
-                android:paddingHorizontal="16dp"
-                android:layout_marginEnd="8dp"
-                android:clickable="true"
-                android:focusable="true"/>
-
-            <TextView
-                android:id="@+id/chipTips"
-                android:layout_width="wrap_content"
-                android:layout_height="32dp"
-                android:text="💡 Tips"
-                android:gravity="center"
-                android:textSize="12sp"
-                android:textColor="#64748B"
-                android:background="@drawable/bg_chip_nonaktif"
-                android:paddingHorizontal="16dp"
-                android:clickable="true"
-                android:focusable="true"/>
-        </LinearLayout>
-    </HorizontalScrollView>
-
-    <!-- LIST NOTIFIKASI -->
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:scrollbars="none"
-        android:paddingTop="12dp"
-        android:clipToPadding="false">
-
-        <LinearLayout
-            android:id="@+id/llNotifikasiContainer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingBottom="24dp"/>
-    </ScrollView>
-
-</LinearLayout>
+</androidx.drawerlayout.widget.DrawerLayout>

@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="#FFFFFF"
+    android:paddingBottom="32dp">
+
+    <!-- Handle bar -->
+    <View
+        android:layout_width="40dp"
+        android:layout_height="4dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/bg_handle_bar"/>
+
+    <!-- Header: ikon + judul + waktu -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="20dp"
+        android:paddingBottom="16dp">
+
+        <TextView
+            android:id="@+id/bsIcon"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:gravity="center"
+            android:textSize="22sp"
+            android:background="@drawable/bg_circle"
+            android:layout_marginEnd="14dp"/>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/bsJudul"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#0F172A"
+                android:textSize="16sp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/bsWaktu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#94A3B8"
+                android:textSize="12sp"
+                android:layout_marginTop="3dp"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Garis pemisah -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#F1F5F9"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginBottom="16dp"/>
+
+    <!-- Pesan lengkap -->
+    <TextView
+        android:id="@+id/bsPesan"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#334155"
+        android:textSize="14sp"
+        android:lineSpacingExtra="4dp"
+        android:paddingHorizontal="20dp"
+        android:paddingBottom="24dp"/>
+
+    <!-- Tombol aksi -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingHorizontal="20dp">
+
+        <!-- Tombol Bintang -->
+        <LinearLayout
+            android:id="@+id/btnBintang"
+            android:layout_width="0dp"
+            android:layout_height="52dp"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:background="@drawable/bg_btn_bintang"
+            android:layout_marginEnd="10dp"
+            android:clickable="true"
+            android:focusable="true">
+
+            <TextView
+                android:id="@+id/tvIconBintang"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="☆"
+                android:textSize="18sp"
+                android:textColor="#EAB308"
+                android:layout_marginEnd="6dp"/>
+
+            <TextView
+                android:id="@+id/tvLabelBintang"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Bintangi"
+                android:textColor="#EAB308"
+                android:textSize="14sp"
+                android:textStyle="bold"/>
+        </LinearLayout>
+
+        <!-- Tombol Hapus -->
+        <LinearLayout
+            android:id="@+id/btnHapus"
+            android:layout_width="0dp"
+            android:layout_height="52dp"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:background="@drawable/bg_btn_hapus"
+            android:clickable="true"
+            android:focusable="true">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🗑"
+                android:textSize="16sp"
+                android:layout_marginEnd="6dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hapus"
+                android:textColor="#EF4444"
+                android:textSize="14sp"
+                android:textStyle="bold"/>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
