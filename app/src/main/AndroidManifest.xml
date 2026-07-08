@@ -22,6 +22,10 @@
             android:name=".BudgetActivity"
             android:exported="false" />
         <activity
+            android:name=".GrafikActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
             android:name=".dashboard"
             android:exported="false" />
         <activity

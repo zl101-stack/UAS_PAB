@@ -96,8 +96,11 @@ public class dashboard extends AppCompatActivity {
             startActivity(i);
         });
 
-        cardGrafik.setOnClickListener(v ->
-                Toast.makeText(this, "Fitur Grafik Keuangan", Toast.LENGTH_SHORT).show());
+        cardGrafik.setOnClickListener(v -> {
+            Intent i = new Intent(this, GrafikActivity.class);
+            i.putExtra("USER_EMAIL", userEmail);
+            startActivity(i);
+        });
 
         cardNotifikasi.setOnClickListener(v ->
                 Toast.makeText(this, "Fitur Notifikasi", Toast.LENGTH_SHORT).show());
