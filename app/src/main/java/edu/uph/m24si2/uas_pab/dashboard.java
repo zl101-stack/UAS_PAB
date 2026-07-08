@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
 import edu.uph.m24si2.uas_pab.adapter.TransactionAdapter;
+import edu.uph.m24si2.uas_pab.db.SavingRepository;
 import edu.uph.m24si2.uas_pab.db.TransactionRepository;
 
 public class dashboard extends AppCompatActivity {
@@ -89,8 +90,11 @@ public class dashboard extends AppCompatActivity {
         });
         // ────────────────────────────────────────────────────────────────────────
 
-        cardTargetTabungan.setOnClickListener(v ->
-                Toast.makeText(this, "Fitur Target Tabungan", Toast.LENGTH_SHORT).show());
+        cardTargetTabungan.setOnClickListener(v -> {
+            Intent i = new Intent(this, SavingTargetActivity.class);
+            i.putExtra("USER_EMAIL", userEmail);
+            startActivity(i);
+        });
 
         cardGrafik.setOnClickListener(v ->
                 Toast.makeText(this, "Fitur Grafik Keuangan", Toast.LENGTH_SHORT).show());
@@ -126,7 +130,8 @@ public class dashboard extends AppCompatActivity {
 
         cachedPemasukan   = TransactionRepository.getTotalAmount(userEmail, "PEMASUKAN");
         cachedPengeluaran = TransactionRepository.getTotalAmount(userEmail, "PENGELUARAN");
-        cachedSaldo       = cachedPemasukan - cachedPengeluaran;
+        long totalTabungan = SavingRepository.getTotalSaved(userEmail);
+        cachedSaldo       = cachedPemasukan - cachedPengeluaran + totalTabungan;
 
         refreshSaldoDisplay();
     }

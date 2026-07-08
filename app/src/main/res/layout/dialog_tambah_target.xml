@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Nama Target (misal: Beli PC)"
+        android:textSize="14sp"
+        android:textColor="#212121"
+        android:layout_marginBottom="4dp" />
+
+    <EditText
+        android:id="@+id/etNamaTarget"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Contoh: Beli PC, Liburan, dll."
+        android:inputType="text"
+        android:layout_marginBottom="16dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Jumlah Target (Rupiah)"
+        android:textSize="14sp"
+        android:textColor="#212121"
+        android:layout_marginBottom="4dp" />
+
+    <EditText
+        android:id="@+id/etJumlahTarget"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Contoh: 10000000"
+        android:inputType="number" />
+
+</LinearLayout>

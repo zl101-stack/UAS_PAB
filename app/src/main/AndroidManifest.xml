@@ -15,6 +15,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.UAS_PAB">
         <activity
+            android:name=".SavingTargetActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
             android:name=".BudgetActivity"
             android:exported="false" />
         <activity
