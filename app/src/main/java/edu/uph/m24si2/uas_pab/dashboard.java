@@ -102,8 +102,11 @@ public class dashboard extends AppCompatActivity {
             startActivity(i);
         });
 
-        cardNotifikasi.setOnClickListener(v ->
-                Toast.makeText(this, "Fitur Notifikasi", Toast.LENGTH_SHORT).show());
+        cardNotifikasi.setOnClickListener(v -> {
+            Intent i = new Intent(this, NotifikasiActivity.class);
+            i.putExtra("USER_EMAIL", userEmail);
+            startActivity(i);
+        });
 
         cardProfile.setOnClickListener(v -> {
             Intent i = new Intent(this, ProfileActivity.class);

@@ -26,6 +26,9 @@
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
         <activity
+            android:name=".NotifikasiActivity"
+            android:exported="false" />
+        <activity
             android:name=".dashboard"
             android:exported="false" />
         <activity
