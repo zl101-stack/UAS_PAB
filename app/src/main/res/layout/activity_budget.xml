@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:layout_marginBottom="24dp">
+        android:layout_marginBottom="16dp">
 
         <ImageView
             android:id="@+id/btnBack"
@@ -35,7 +35,44 @@
             android:layout_marginStart="16dp"/>
     </LinearLayout>
 
-    <!-- Card 1: Input Target Budget -->
+    <!-- Navigasi Bulan -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginBottom="20dp">
+
+        <ImageView
+            android:id="@+id/btnPrevMonth"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:src="@android:drawable/ic_media_previous"
+            app:tint="#1A56DB"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="6dp"/>
+
+        <TextView
+            android:id="@+id/tvMonthYear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Bulan Tahun"
+            android:textColor="#0F172A"
+            android:textSize="18sp"
+            android:fontFamily="sans-serif-bold"
+            android:layout_marginHorizontal="24dp"/>
+
+        <ImageView
+            android:id="@+id/btnNextMonth"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:src="@android:drawable/ic_media_next"
+            app:tint="#1A56DB"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="6dp"/>
+    </LinearLayout>
+
+    <!-- Card 1: Ringkasan Budget -->
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -48,84 +85,28 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="20dp">
+            android:padding="20dp"
+            android:gravity="center">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Atur Anggaran Bulanan"
-                android:textColor="#334155"
-                android:textSize="16sp"
-                android:fontFamily="sans-serif-bold"
-                android:layout_marginBottom="12dp"/>
-
-            <EditText
-                android:id="@+id/etBudgetLimit"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:background="@drawable/bg_edittext"
-                android:hint="Contoh: 5000000"
-                android:inputType="number"
-                android:textColor="#0F172A"
-                android:textColorHint="#94A3B8"
-                android:paddingHorizontal="16dp"
-                android:layout_marginBottom="16dp"/>
-
-            <Button
-                android:id="@+id/btnSaveBudget"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:text="Simpan Anggaran"
-                android:textAllCaps="false"
-                android:backgroundTint="#1A56DB"
-                android:textColor="#FFFFFF"
-                android:fontFamily="sans-serif-medium"
-                android:textSize="15sp"
-                app:cornerRadius="12dp"/>
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
-
-    <!-- Card 2: Analisa Pengeluaran -->
-    <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:cardBackgroundColor="#FFFFFF"
-        app:cardCornerRadius="16dp"
-        app:cardElevation="2dp">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="20dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Ringkasan Bulan Ini"
-                android:textColor="#334155"
-                android:textSize="16sp"
-                android:fontFamily="sans-serif-bold"
-                android:layout_marginBottom="20dp"/>
-
-            <!-- Sisa Anggaran -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Sisa Anggaran Anda:"
+                android:text="Sisa Saldo Budget Saat Ini:"
                 android:textColor="#64748B"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:layout_marginBottom="4dp"/>
+
+            <!-- Sisa Uang Budget -->
             <TextView
                 android:id="@+id/tvSisaBudget"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Rp 0"
                 android:textColor="#10B981"
-                android:textSize="28sp"
+                android:textSize="32sp"
                 android:fontFamily="sans-serif-black"
                 android:layout_marginBottom="16dp"/>
 
-            <!-- Progress Bar -->
             <ProgressBar
                 android:id="@+id/progressBarBudget"
                 style="?android:attr/progressBarStyleHorizontal"
@@ -135,69 +116,117 @@
                 android:progressTint="#1A56DB"
                 android:max="100"
                 android:progress="0"
-                android:layout_marginBottom="8dp"/>
+                android:layout_marginBottom="12dp"/>
 
+            <!-- Teks Terpakai X / Y -->
             <TextView
-                android:id="@+id/tvStatusPersentase"
-                android:layout_width="wrap_content"
+                android:id="@+id/tvTerpakai"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Terpakai 0%"
-                android:textColor="#64748B"
-                android:textSize="12sp"
-                android:layout_gravity="end"
-                android:layout_marginBottom="20dp"/>
+                android:text="Terpakai Rp 0 / Rp 0"
+                android:textColor="#334155"
+                android:textSize="15sp"
+                android:fontFamily="sans-serif-bold"
+                android:gravity="center"/>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 
-            <!-- Detail Perbandingan -->
+    <!-- Card 2: Aksi (Atur & Kurangi) -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:scrollbars="none">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardBackgroundColor="#FFFFFF"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="2dp"
+            android:layout_marginBottom="20dp">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="2">
+                android:orientation="vertical"
+                android:padding="20dp">
 
-                <LinearLayout
-                    android:layout_width="0dp"
+                <!-- Aksi 1: Atur / Edit Budget -->
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Target"
-                        android:textColor="#64748B"
-                        android:textSize="12sp"/>
-                    <TextView
-                        android:id="@+id/tvTargetBudget"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Rp 0"
-                        android:textColor="#0F172A"
-                        android:textSize="15sp"
-                        android:fontFamily="sans-serif-bold"/>
-                </LinearLayout>
+                    android:text="1. Buat / Edit Target Budget"
+                    android:textColor="#0F172A"
+                    android:textSize="14sp"
+                    android:fontFamily="sans-serif-bold"
+                    android:layout_marginBottom="12dp"/>
 
-                <LinearLayout
-                    android:layout_width="0dp"
+                <EditText
+                    android:id="@+id/etBudgetLimit"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@drawable/bg_edittext"
+                    android:hint="Nominal Target (Cth: 1000000)"
+                    android:inputType="number"
+                    android:textColor="#0F172A"
+                    android:textColorHint="#94A3B8"
+                    android:paddingHorizontal="16dp"
+                    android:layout_marginBottom="12dp"/>
+
+                <Button
+                    android:id="@+id/btnSaveBudget"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:text="Simpan Budget"
+                    android:textAllCaps="false"
+                    android:backgroundTint="#1A56DB"
+                    android:textColor="#FFFFFF"
+                    android:fontFamily="sans-serif-medium"
+                    android:textSize="15sp"
+                    app:cornerRadius="10dp"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#E2E8F0"
+                    android:layout_marginVertical="20dp"/>
+
+                <!-- Aksi 2: Kurangi Dana -->
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:gravity="end">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Pengeluaran"
-                        android:textColor="#64748B"
-                        android:textSize="12sp"/>
-                    <TextView
-                        android:id="@+id/tvTotalPengeluaran"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Rp 0"
-                        android:textColor="#EF4444"
-                        android:textSize="15sp"
-                        android:fontFamily="sans-serif-bold"/>
-                </LinearLayout>
+                    android:text="2. Kurangi Dana (Pemakaian Baru)"
+                    android:textColor="#0F172A"
+                    android:textSize="14sp"
+                    android:fontFamily="sans-serif-bold"
+                    android:layout_marginBottom="12dp"/>
+
+                <EditText
+                    android:id="@+id/etUseBudget"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@drawable/bg_edittext"
+                    android:hint="Nominal Pakai (Cth: 50000)"
+                    android:inputType="number"
+                    android:textColor="#0F172A"
+                    android:textColorHint="#94A3B8"
+                    android:paddingHorizontal="16dp"
+                    android:layout_marginBottom="12dp"/>
+
+                <Button
+                    android:id="@+id/btnUseBudget"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:text="Kurangi Dana"
+                    android:textAllCaps="false"
+                    android:backgroundTint="#EF4444"
+                    android:textColor="#FFFFFF"
+                    android:fontFamily="sans-serif-medium"
+                    android:textSize="15sp"
+                    app:cornerRadius="10dp"/>
+
             </LinearLayout>
-
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
+        </androidx.cardview.widget.CardView>
+    </ScrollView>
 </LinearLayout>

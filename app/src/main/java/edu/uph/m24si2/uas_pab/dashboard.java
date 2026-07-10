@@ -137,7 +137,15 @@ public class dashboard extends AppCompatActivity {
         cachedPemasukan   = TransactionRepository.getTotalAmount(userEmail, "PEMASUKAN");
         cachedPengeluaran = TransactionRepository.getTotalAmount(userEmail, "PENGELUARAN");
         long totalTabungan = SavingRepository.getTotalSaved(userEmail);
-        cachedSaldo       = cachedPemasukan - cachedPengeluaran + totalTabungan;
+
+        // ── TAMBAHAN FITUR: Ambil limit budget bulan ini untuk memotong saldo ──
+        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("MM-yyyy", java.util.Locale.getDefault());
+        String monthKey = sdf.format(java.util.Calendar.getInstance().getTime());
+        android.content.SharedPreferences prefs = getSharedPreferences("BudgetPrefs", android.content.Context.MODE_PRIVATE);
+        long currentBudgetLimit = prefs.getLong("limit_" + userEmail + "_" + monthKey, 0);
+
+        // ── UPDATE RUMUS SALDO: Pemasukan - Pengeluaran + Tabungan - Budget ──
+        cachedSaldo       = cachedPemasukan - cachedPengeluaran + totalTabungan - currentBudgetLimit;
 
         refreshSaldoDisplay();
     }

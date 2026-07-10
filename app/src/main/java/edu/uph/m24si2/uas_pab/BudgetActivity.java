@@ -13,107 +13,144 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
+
 import edu.uph.m24si2.uas_pab.adapter.TransactionAdapter;
-import edu.uph.m24si2.uas_pab.db.TransactionRepository;
 
 public class BudgetActivity extends AppCompatActivity {
 
     private String userEmail;
-    private long totalPengeluaran = 0;
-    private long budgetLimit = 0;
-
-    private EditText etBudgetLimit;
-    private TextView tvTargetBudget, tvTotalPengeluaran, tvSisaBudget, tvStatusPersentase;
-    private ProgressBar progressBarBudget;
+    private Calendar currentCalendar;
     private SharedPreferences sharedPreferences;
+
+    private TextView tvMonthYear, tvSisaBudget, tvTerpakai;
+    private ProgressBar progressBarBudget;
+    private EditText etBudgetLimit, etUseBudget;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_budget);
 
-        // Ambil email dari intent
         userEmail = getIntent().getStringExtra("USER_EMAIL");
         if (userEmail == null) userEmail = "default";
 
-        // Inisialisasi SharedPreferences untuk menyimpan budget secara lokal per akun
         sharedPreferences = getSharedPreferences("BudgetPrefs", Context.MODE_PRIVATE);
+        currentCalendar = Calendar.getInstance();
 
-        // Bind Views
         ImageView btnBack = findViewById(R.id.btnBack);
-        etBudgetLimit = findViewById(R.id.etBudgetLimit);
-        Button btnSaveBudget = findViewById(R.id.btnSaveBudget);
-        tvTargetBudget = findViewById(R.id.tvTargetBudget);
-        tvTotalPengeluaran = findViewById(R.id.tvTotalPengeluaran);
+        tvMonthYear = findViewById(R.id.tvMonthYear);
+        ImageView btnPrevMonth = findViewById(R.id.btnPrevMonth);
+        ImageView btnNextMonth = findViewById(R.id.btnNextMonth);
+
         tvSisaBudget = findViewById(R.id.tvSisaBudget);
-        tvStatusPersentase = findViewById(R.id.tvStatusPersentase);
+        tvTerpakai = findViewById(R.id.tvTerpakai);
         progressBarBudget = findViewById(R.id.progressBarBudget);
 
-        // Aksi tombol kembali
+        etBudgetLimit = findViewById(R.id.etBudgetLimit);
+        Button btnSaveBudget = findViewById(R.id.btnSaveBudget);
+
+        etUseBudget = findViewById(R.id.etUseBudget);
+        Button btnUseBudget = findViewById(R.id.btnUseBudget);
+
         btnBack.setOnClickListener(v -> finish());
 
-        // Aksi simpan budget
+        btnPrevMonth.setOnClickListener(v -> {
+            currentCalendar.add(Calendar.MONTH, -1);
+            loadMonthData();
+        });
+
+        btnNextMonth.setOnClickListener(v -> {
+            currentCalendar.add(Calendar.MONTH, 1);
+            loadMonthData();
+        });
+
+        // Simpan / Edit Target Budget
         btnSaveBudget.setOnClickListener(v -> {
             String input = etBudgetLimit.getText().toString().trim();
             if (input.isEmpty()) {
-                Toast.makeText(this, "Masukkan nominal anggaran!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Masukkan nominal target budget!", Toast.LENGTH_SHORT).show();
                 return;
             }
-            budgetLimit = Long.parseLong(input);
-
-            // Simpan ke SharedPreferences dengan key unik berdasarkan email
-            sharedPreferences.edit().putLong("budget_" + userEmail, budgetLimit).apply();
-
-            Toast.makeText(this, "Anggaran berhasil disimpan!", Toast.LENGTH_SHORT).show();
-            etBudgetLimit.setText(""); // Kosongkan form
-            calculateBudget(); // Hitung ulang layar
+            long limit = Long.parseLong(input);
+            saveBudgetLimit(limit);
+            etBudgetLimit.setText("");
+            Toast.makeText(this, "Target budget berhasil disimpan!", Toast.LENGTH_SHORT).show();
+            loadMonthData();
         });
 
-        // Load data pertama kali dibuka
-        loadData();
+        // Kurangi Dana Budget (Pemakaian)
+        btnUseBudget.setOnClickListener(v -> {
+            String input = etUseBudget.getText().toString().trim();
+            if (input.isEmpty()) {
+                Toast.makeText(this, "Masukkan nominal dana yang dipakai!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            long used = Long.parseLong(input);
+            addBudgetUsed(used);
+            etUseBudget.setText("");
+            Toast.makeText(this, "Dana berhasil dikurangi dari budget!", Toast.LENGTH_SHORT).show();
+            loadMonthData();
+        });
+
+        loadMonthData();
     }
 
-    private void loadData() {
-        // 1. Ambil target budget yang pernah disimpan
-        budgetLimit = sharedPreferences.getLong("budget_" + userEmail, 0);
-
-        // 2. Ambil total PENGELUARAN asli dari database Realm (menggunakan Repository buatanmu)
-        totalPengeluaran = TransactionRepository.getTotalAmount(userEmail, "PENGELUARAN");
-
-        // 3. Kalkulasi dan tampilkan
-        calculateBudget();
+    private String getMonthKey() {
+        SimpleDateFormat sdf = new SimpleDateFormat("MM-yyyy", Locale.getDefault());
+        return sdf.format(currentCalendar.getTime());
     }
 
-    private void calculateBudget() {
-        // Tampilkan format Rupiah di ringkasan
-        tvTargetBudget.setText(TransactionAdapter.formatRupiah(budgetLimit));
-        tvTotalPengeluaran.setText(TransactionAdapter.formatRupiah(totalPengeluaran));
+    private void loadMonthData() {
+        SimpleDateFormat sdfDisplay = new SimpleDateFormat("MMMM yyyy", new Locale("id", "ID"));
+        tvMonthYear.setText(sdfDisplay.format(currentCalendar.getTime()));
 
-        long sisa = budgetLimit - totalPengeluaran;
+        String monthKey = getMonthKey();
+        long limit = sharedPreferences.getLong("limit_" + userEmail + "_" + monthKey, 0);
+        long used = sharedPreferences.getLong("used_" + userEmail + "_" + monthKey, 0);
 
-        if (budgetLimit == 0) {
-            tvSisaBudget.setText("Atur Anggaran Dulu");
-            tvSisaBudget.setTextColor(Color.parseColor("#64748B")); // <-- Diubah agar pas dengan tema terang
+        // AUTO-HEAL: Kalau ada data minus dari error sebelumnya, paksa jadi 0
+        if (used < 0) {
+            used = 0;
+            sharedPreferences.edit().putLong("used_" + userEmail + "_" + monthKey, 0).apply();
+        }
+
+        long sisa = limit - used;
+
+        if (limit == 0) {
+            tvSisaBudget.setText("Atur Dulu");
+            tvSisaBudget.setTextColor(Color.parseColor("#64748B"));
+            tvTerpakai.setText("Terpakai Rp 0 / Rp 0");
+            progressBarBudget.setMax(100);
             progressBarBudget.setProgress(0);
-            tvStatusPersentase.setText("Terpakai 0%");
         } else {
-            // Hitung sisa
             if (sisa < 0) {
-                // Over budget
                 tvSisaBudget.setText("- " + TransactionAdapter.formatRupiah(Math.abs(sisa)));
-                tvSisaBudget.setTextColor(Color.parseColor("#EF4444")); // Merah (Melewati batas)
+                tvSisaBudget.setTextColor(Color.parseColor("#EF4444")); // Merah (Over)
             } else {
-                // Masih aman
                 tvSisaBudget.setText(TransactionAdapter.formatRupiah(sisa));
                 tvSisaBudget.setTextColor(Color.parseColor("#10B981")); // Hijau (Aman)
             }
 
-            // Hitung persentase untuk Progress Bar
-            int persentase = (int) ((totalPengeluaran * 100) / budgetLimit);
-            if (persentase > 100) persentase = 100;
+            tvTerpakai.setText("Terpakai " + TransactionAdapter.formatRupiah(used) + " / " + TransactionAdapter.formatRupiah(limit));
 
-            progressBarBudget.setProgress(persentase);
-            tvStatusPersentase.setText("Terpakai " + persentase + "%");
+            progressBarBudget.setMax(100);
+            int progress = (int) ((used * 100) / limit);
+            if (progress > 100) progress = 100;
+            progressBarBudget.setProgress(progress);
         }
+    }
+
+    private void saveBudgetLimit(long limit) {
+        String monthKey = getMonthKey();
+        sharedPreferences.edit().putLong("limit_" + userEmail + "_" + monthKey, limit).apply();
+    }
+
+    private void addBudgetUsed(long amount) {
+        String monthKey = getMonthKey();
+        long currentUsed = sharedPreferences.getLong("used_" + userEmail + "_" + monthKey, 0);
+        sharedPreferences.edit().putLong("used_" + userEmail + "_" + monthKey, currentUsed + amount).apply();
     }
 }
