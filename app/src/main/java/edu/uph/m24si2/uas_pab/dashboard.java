@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
@@ -113,11 +114,8 @@ public class dashboard extends AppCompatActivity {
             startActivity(i);
         });
 
-        cardVideo.setOnClickListener(v -> {
-            Intent i = new Intent(this, EdukasiActivity.class);
-            i.putExtra("USER_EMAIL", userEmail);
-            startActivity(i);
-        });
+        cardVideo.setOnClickListener(v ->
+                Toast.makeText(this, "Fitur Video Edukasi segera hadir", Toast.LENGTH_SHORT).show());
     }
 
     @Override
