@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#F4F6F9">
+
+    <!-- ═══════════════ HEADER ═══════════════ -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#1A56DB"
+        android:paddingTop="16dp"
+        android:paddingBottom="20dp"
+        android:paddingHorizontal="16dp"
+        android:elevation="4dp">
+
+        <!-- Baris atas: back + judul -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:id="@+id/btnBack"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:src="@drawable/ic_back"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:focusable="true"
+                android:contentDescription="Kembali" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Edukasi Keuangan"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_marginStart="8dp" />
+
+        </LinearLayout>
+
+        <!-- Sub-judul -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Belajar kelola keuangan lebih cerdas"
+            android:textColor="#BFDBFE"
+            android:textSize="13sp"
+            android:layout_marginTop="4dp"
+            android:layout_marginStart="44dp" />
+
+    </LinearLayout>
+
+    <!-- ═══════════════ KONTEN SCROLL ═══════════════ -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="16dp"
+            android:paddingTop="20dp"
+            android:paddingBottom="32dp">
+
+            <!-- ═══ BANNER MOTIVASI ═══ -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="4dp"
+                android:layout_marginBottom="24dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:background="#1A56DB"
+                    android:padding="20dp"
+                    android:gravity="center_vertical">
+
+                    <!-- Ikon buku -->
+                    <TextView
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
+                        android:text="📚"
+                        android:textSize="32sp"
+                        android:gravity="center"
+                        android:layout_marginEnd="16dp" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Mulai Belajar Hari Ini!"
+                            android:textColor="#FFFFFF"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Tingkatkan literasi keuanganmu dengan video pilihan dari para ahli."
+                            android:textColor="#BFDBFE"
+                            android:textSize="12sp"
+                            android:layout_marginTop="4dp" />
+
+                        <!-- Badge jumlah video -->
+                        <TextView
+                            android:id="@+id/tvJumlahVideo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="10 Video Tersedia"
+                            android:textColor="#1A56DB"
+                            android:textSize="11sp"
+                            android:textStyle="bold"
+                            android:background="#FFFFFF"
+                            android:paddingHorizontal="10dp"
+                            android:paddingVertical="4dp"
+                            android:layout_marginTop="10dp" />
+
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- ═══ FILTER KATEGORI ═══ -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Kategori"
+                android:textColor="#1E293B"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="12dp" />
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="none"
+                android:layout_marginBottom="24dp">
+
+                <LinearLayout
+                    android:id="@+id/chipGroup"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <!-- Chip: Semua -->
+                    <TextView
+                        android:id="@+id/chipSemua"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Semua"
+                        android:textColor="#FFFFFF"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        android:background="#1A56DB"
+                        android:paddingHorizontal="16dp"
+                        android:paddingVertical="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:clickable="true"
+                        android:focusable="true" />
+
+                    <!-- Chip: Investasi -->
+                    <TextView
+                        android:id="@+id/chipInvestasi"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Investasi"
+                        android:textColor="#64748B"
+                        android:textSize="13sp"
+                        android:background="#FFFFFF"
+                        android:paddingHorizontal="16dp"
+                        android:paddingVertical="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:clickable="true"
+                        android:focusable="true" />
+
+                    <!-- Chip: Tabungan -->
+                    <TextView
+                        android:id="@+id/chipTabungan"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Tabungan"
+                        android:textColor="#64748B"
+                        android:textSize="13sp"
+                        android:background="#FFFFFF"
+                        android:paddingHorizontal="16dp"
+                        android:paddingVertical="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:clickable="true"
+                        android:focusable="true" />
+
+                    <!-- Chip: Budgeting -->
+                    <TextView
+                        android:id="@+id/chipBudgeting"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Budgeting"
+                        android:textColor="#64748B"
+                        android:textSize="13sp"
+                        android:background="#FFFFFF"
+                        android:paddingHorizontal="16dp"
+                        android:paddingVertical="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:clickable="true"
+                        android:focusable="true" />
+
+                    <!-- Chip: Bebas Utang -->
+                    <TextView
+                        android:id="@+id/chipBebasUtang"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Bebas Utang"
+                        android:textColor="#64748B"
+                        android:textSize="13sp"
+                        android:background="#FFFFFF"
+                        android:paddingHorizontal="16dp"
+                        android:paddingVertical="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:clickable="true"
+                        android:focusable="true" />
+
+                </LinearLayout>
+            </HorizontalScrollView>
+
+            <!-- ═══ HEADER VIDEO ═══ -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="16dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Video Pilihan"
+                    android:textColor="#1E293B"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvCountVideo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="10 video"
+                    android:textColor="#64748B"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+            <!-- ═══ RECYCLER VIEW VIDEO ═══ -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvVideo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
+                android:clipToPadding="false" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
