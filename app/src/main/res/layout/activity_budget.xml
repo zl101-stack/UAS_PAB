@@ -226,6 +226,25 @@
                     android:textSize="15sp"
                     app:cornerRadius="10dp"/>
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#E2E8F0"
+                    android:layout_marginVertical="20dp"/>
+
+                <!-- Aksi 3: Reset Budget -->
+                <Button
+                    android:id="@+id/btnResetBudget"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:text="Reset Budget Bulan Ini"
+                    android:textAllCaps="false"
+                    android:backgroundTint="#94A3B8"
+                    android:textColor="#FFFFFF"
+                    android:fontFamily="sans-serif-medium"
+                    android:textSize="15sp"
+                    app:cornerRadius="10dp"/>
+
             </LinearLayout>
         </androidx.cardview.widget.CardView>
     </ScrollView>

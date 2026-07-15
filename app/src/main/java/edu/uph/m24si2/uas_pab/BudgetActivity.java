@@ -95,6 +95,25 @@ public class BudgetActivity extends AppCompatActivity {
             loadMonthData();
         });
 
+        // Reset Budget bulan ini
+        Button btnResetBudget = findViewById(R.id.btnResetBudget);
+        btnResetBudget.setOnClickListener(v -> {
+            new androidx.appcompat.app.AlertDialog.Builder(this)
+                    .setTitle("Reset Budget")
+                    .setMessage("Reset semua data budget bulan ini ke 0?")
+                    .setPositiveButton("Reset", (d, w) -> {
+                        String monthKey = getMonthKey();
+                        sharedPreferences.edit()
+                                .putLong("limit_" + userEmail + "_" + monthKey, 0)
+                                .putLong("used_" + userEmail + "_" + monthKey, 0)
+                                .apply();
+                        Toast.makeText(this, "Budget bulan ini direset!", Toast.LENGTH_SHORT).show();
+                        loadMonthData();
+                    })
+                    .setNegativeButton("Batal", null)
+                    .show();
+        });
+
         loadMonthData();
     }
 
