@@ -5,3 +5,5 @@ Nama Anggota Kelompok : Calvin Owen (03081240024), Euwin Gozalie (03081240022), 
 SDGs yang dipilih : No Poverty
 
 Deskripsi singkat aplikasi : Dana Bijak adalah aplikasi pencatatan keuangan yang dirancang untuk membantu pengguna mengelola keuangan pribadi secara lebih teratur, mudah, dan efisien. Melalui aplikasi ini, pengguna dapat mencatat pemasukan, pengeluaran, serta memantau kondisi keuangan secara berkala sehingga dapat membuat keputusan finansial yang lebih bijaksana.
+
+Fitur utama aplikasi : login/register, dashboard, pencatatan pemasukan, pencatatan pengeluaran, atur budget, target tabungan, grafik keuangan, notifikasi, profile, video edukasi
