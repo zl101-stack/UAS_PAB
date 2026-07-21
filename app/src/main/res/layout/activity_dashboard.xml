@@ -428,7 +428,7 @@
                     <ImageView
                         android:layout_width="28dp"
                         android:layout_height="28dp"
-                        android:src="@android:drawable/ic_dialog_info"
+                        android:src="@drawable/ic_notification"
                         app:tint="#1A56DB"/>
                     <TextView
                         android:layout_width="wrap_content"
