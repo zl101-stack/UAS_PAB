@@ -77,4 +77,17 @@ public class SavingRepository {
             realm.close();
         }
     }
+
+    /** Ambil nama target berdasarkan ID, untuk catatan transaksi. */
+    public static String getNamaTarget(String targetId) {
+        Realm realm = Realm.getDefaultInstance();
+        try {
+            SavingTarget target = realm.where(SavingTarget.class)
+                    .equalTo("id", targetId)
+                    .findFirst();
+            return target != null ? target.getNamaTarget() : "Target Tabungan";
+        } finally {
+            realm.close();
+        }
+    }
 }

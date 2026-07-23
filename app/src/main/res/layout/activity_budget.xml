@@ -214,6 +214,26 @@
                     android:paddingHorizontal="16dp"
                     android:layout_marginBottom="12dp"/>
 
+                <!-- Spinner Kategori Pengeluaran -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/spinnerKategoriBudget"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:hint="Pilih Kategori"
+                        android:inputType="none"
+                        android:textColor="#0F172A"
+                        android:textColorHint="#94A3B8"
+                        android:paddingHorizontal="16dp"
+                        android:background="@drawable/bg_edittext"
+                        android:textSize="14sp"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
                 <Button
                     android:id="@+id/btnUseBudget"
                     android:layout_width="match_parent"

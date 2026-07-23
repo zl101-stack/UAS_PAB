@@ -13,10 +13,14 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import edu.uph.m24si2.uas_pab.adapter.TransactionAdapter;
 import edu.uph.m24si2.uas_pab.db.SavingRepository;
+import edu.uph.m24si2.uas_pab.db.TransactionRepository;
 import edu.uph.m24si2.uas_pab.model.SavingTarget;
 
 public class SavingTargetActivity extends AppCompatActivity {
@@ -149,8 +153,41 @@ public class SavingTargetActivity extends AppCompatActivity {
                         Toast.makeText(this, "Jumlah harus lebih dari 0", Toast.LENGTH_SHORT).show();
                         return;
                     }
+
+                    // Cek apakah saldo mencukupi
+                    long totalPemasukan   = TransactionRepository.getTotalAmount(userEmail, "PEMASUKAN");
+                    long totalPengeluaran = TransactionRepository.getTotalAmount(userEmail, "PENGELUARAN");
+                    long saldoSekarang    = totalPemasukan - totalPengeluaran;
+
+                    if (amount > saldoSekarang) {
+                        Toast.makeText(this,
+                                "Saldo tidak cukup! Saldo kamu: " +
+                                TransactionAdapter.formatRupiah(saldoSekarang),
+                                Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
+                    // Ambil nama target untuk catatan transaksi
+                    String namaTarget = SavingRepository.getNamaTarget(targetId);
+
+                    // 1. Tambah dana ke progress tabungan
                     SavingRepository.addSaving(targetId, amount);
-                    Toast.makeText(this, "Dana berhasil ditambahkan!", Toast.LENGTH_SHORT).show();
+
+                    // 2. Catat sebagai PENGELUARAN agar saldo dashboard berkurang
+                    String tanggalHari = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+                            .format(new Date());
+                    TransactionRepository.addTransaction(
+                            userEmail,
+                            "PENGELUARAN",
+                            amount,
+                            "Tabungan",
+                            "ic_saving",
+                            tanggalHari,
+                            "Setoran tabungan: " + namaTarget
+                    );
+
+                    Toast.makeText(this, "Dana berhasil ditambahkan! Saldo berkurang " +
+                            TransactionAdapter.formatRupiah(amount), Toast.LENGTH_SHORT).show();
                     loadTargets();
                 })
                 .setNegativeButton("Batal", null)

@@ -4,6 +4,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -11,6 +14,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.text.SimpleDateFormat;
@@ -18,16 +22,30 @@ import java.util.Calendar;
 import java.util.Locale;
 
 import edu.uph.m24si2.uas_pab.adapter.TransactionAdapter;
+import edu.uph.m24si2.uas_pab.db.TransactionRepository;
 
 public class BudgetActivity extends AppCompatActivity {
+
+    // Daftar kategori — sama persis dengan PengeluaranActivity
+    private static final String[][] CATEGORIES = {
+            {"Makan & Minum",  "makan"},
+            {"Transportasi",   "transport"},
+            {"Belanja",        "belanja"},
+            {"Tagihan",        "tagihan"},
+            {"Kesehatan",      "kesehatan"},
+            {"Hiburan",        "hiburan"},
+            {"Pendidikan",     "pendidikan"},
+            {"Lainnya",        "lainnya_out"},
+    };
 
     private String userEmail;
     private Calendar currentCalendar;
     private SharedPreferences sharedPreferences;
 
-    private TextView tvMonthYear, tvSisaBudget, tvTerpakai;
-    private ProgressBar progressBarBudget;
-    private EditText etBudgetLimit, etUseBudget;
+    private TextView             tvMonthYear, tvSisaBudget, tvTerpakai;
+    private ProgressBar          progressBarBudget;
+    private EditText             etBudgetLimit, etUseBudget;
+    private AutoCompleteTextView spinnerKategoriBudget;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,75 +55,189 @@ public class BudgetActivity extends AppCompatActivity {
         userEmail = getIntent().getStringExtra("USER_EMAIL");
         if (userEmail == null) userEmail = "default";
 
-        sharedPreferences = getSharedPreferences("BudgetPrefs", Context.MODE_PRIVATE);
-        currentCalendar = Calendar.getInstance();
+        sharedPreferences  = getSharedPreferences("BudgetPrefs", Context.MODE_PRIVATE);
+        currentCalendar    = Calendar.getInstance();
 
-        ImageView btnBack = findViewById(R.id.btnBack);
-        tvMonthYear = findViewById(R.id.tvMonthYear);
+        // ── Bind views ────────────────────────────────────────────────────────
+        ImageView btnBack     = findViewById(R.id.btnBack);
+        tvMonthYear           = findViewById(R.id.tvMonthYear);
         ImageView btnPrevMonth = findViewById(R.id.btnPrevMonth);
         ImageView btnNextMonth = findViewById(R.id.btnNextMonth);
+        tvSisaBudget          = findViewById(R.id.tvSisaBudget);
+        tvTerpakai            = findViewById(R.id.tvTerpakai);
+        progressBarBudget     = findViewById(R.id.progressBarBudget);
+        etBudgetLimit         = findViewById(R.id.etBudgetLimit);
+        Button btnSaveBudget  = findViewById(R.id.btnSaveBudget);
+        etUseBudget           = findViewById(R.id.etUseBudget);
+        Button btnUseBudget   = findViewById(R.id.btnUseBudget);
+        Button btnResetBudget = findViewById(R.id.btnResetBudget);
+        spinnerKategoriBudget = findViewById(R.id.spinnerKategoriBudget);
 
-        tvSisaBudget = findViewById(R.id.tvSisaBudget);
-        tvTerpakai = findViewById(R.id.tvTerpakai);
-        progressBarBudget = findViewById(R.id.progressBarBudget);
+        // ── Setup dropdown kategori ───────────────────────────────────────────
+        String[] labels = new String[CATEGORIES.length];
+        for (int i = 0; i < CATEGORIES.length; i++) labels[i] = CATEGORIES[i][0];
 
-        etBudgetLimit = findViewById(R.id.etBudgetLimit);
-        Button btnSaveBudget = findViewById(R.id.btnSaveBudget);
+        ArrayAdapter<String> catAdapter = new ArrayAdapter<>(
+                this, android.R.layout.simple_dropdown_item_1line, labels);
+        spinnerKategoriBudget.setAdapter(catAdapter);
+        spinnerKategoriBudget.setThreshold(0);
+        spinnerKategoriBudget.setOnClickListener(v -> {
+            hideKeyboard();
+            spinnerKategoriBudget.showDropDown();
+        });
+        spinnerKategoriBudget.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                hideKeyboard();
+                spinnerKategoriBudget.showDropDown();
+            }
+        });
 
-        etUseBudget = findViewById(R.id.etUseBudget);
-        Button btnUseBudget = findViewById(R.id.btnUseBudget);
-
+        // ── Navigasi ─────────────────────────────────────────────────────────
         btnBack.setOnClickListener(v -> finish());
-
         btnPrevMonth.setOnClickListener(v -> {
             currentCalendar.add(Calendar.MONTH, -1);
             loadMonthData();
         });
-
         btnNextMonth.setOnClickListener(v -> {
             currentCalendar.add(Calendar.MONTH, 1);
             loadMonthData();
         });
 
-        // Simpan / Edit Target Budget
+        // ── Simpan Budget → langsung potong saldo ────────────────────────────
         btnSaveBudget.setOnClickListener(v -> {
+            hideKeyboard();
             String input = etBudgetLimit.getText().toString().trim();
             if (input.isEmpty()) {
                 Toast.makeText(this, "Masukkan nominal target budget!", Toast.LENGTH_SHORT).show();
                 return;
             }
-            long limit = Long.parseLong(input);
+
+            long limit         = Long.parseLong(input);
+            long saldoSekarang = getSaldoSekarang();
+
+            // Validasi: budget tidak boleh melebihi total saldo
+            if (limit > saldoSekarang) {
+                new AlertDialog.Builder(this)
+                        .setTitle("⚠ Budget Melebihi Saldo")
+                        .setMessage("Budget Anda Melebihi Total Saldo!\n\n" +
+                                "Total Saldo    : " + TransactionAdapter.formatRupiah(saldoSekarang) + "\n" +
+                                "Budget Input   : " + TransactionAdapter.formatRupiah(limit) + "\n\n" +
+                                "Silakan masukkan nominal yang tidak melebihi total saldo Anda.")
+                        .setPositiveButton("Oke", null)
+                        .show();
+                return;
+            }
+
+            // Simpan limit ke SharedPreferences
             saveBudgetLimit(limit);
+
+            // Catat sebagai PENGELUARAN → saldo dashboard otomatis berkurang
+            String tanggal = getTanggalHari();
+            String bulanTahun = new SimpleDateFormat("MMMM yyyy", new Locale("id", "ID"))
+                    .format(currentCalendar.getTime());
+            TransactionRepository.addTransaction(
+                    userEmail,
+                    "PENGELUARAN",
+                    limit,
+                    "Budget",
+                    "ic_budget",
+                    tanggal,
+                    "Budget bulanan " + bulanTahun
+            );
+
             etBudgetLimit.setText("");
-            Toast.makeText(this, "Target budget berhasil disimpan!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,
+                    "Budget " + TransactionAdapter.formatRupiah(limit) + " disimpan! Saldo berkurang.",
+                    Toast.LENGTH_SHORT).show();
             loadMonthData();
         });
 
-        // Kurangi Dana Budget (Pemakaian)
+        // ── Kurangi Dana → wajib pilih kategori → masuk histori pengeluaran ──
         btnUseBudget.setOnClickListener(v -> {
-            String input = etUseBudget.getText().toString().trim();
+            hideKeyboard();
+            String input    = etUseBudget.getText().toString().trim();
+            String kategori = spinnerKategoriBudget.getText().toString().trim();
+
             if (input.isEmpty()) {
                 Toast.makeText(this, "Masukkan nominal dana yang dipakai!", Toast.LENGTH_SHORT).show();
                 return;
             }
+            if (kategori.isEmpty()) {
+                Toast.makeText(this, "Pilih kategori pengeluaran terlebih dahulu!", Toast.LENGTH_SHORT).show();
+                spinnerKategoriBudget.showDropDown();
+                return;
+            }
+
             long used = Long.parseLong(input);
+
+            // Cek budget sudah diatur
+            String monthKey    = getMonthKey();
+            long limit         = sharedPreferences.getLong("limit_" + userEmail + "_" + monthKey, 0);
+            long sudahDipakai  = sharedPreferences.getLong("used_"  + userEmail + "_" + monthKey, 0);
+            long sisaBudget    = limit - sudahDipakai;
+
+            if (limit == 0) {
+                Toast.makeText(this, "Atur target budget dulu sebelum memakai dana!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (used > sisaBudget) {
+                Toast.makeText(this,
+                        "Melebihi sisa budget!\nSisa budget: " + TransactionAdapter.formatRupiah(sisaBudget),
+                        Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            // Cek saldo mencukupi
+            long saldoSekarang = getSaldoSekarang();
+            if (used > saldoSekarang) {
+                new AlertDialog.Builder(this)
+                        .setTitle("⚠ Saldo Tidak Cukup")
+                        .setMessage("Saldo Anda tidak mencukupi!\n\n" +
+                                "Saldo saat ini : " + TransactionAdapter.formatRupiah(saldoSekarang) + "\n" +
+                                "Dana yang dipakai: " + TransactionAdapter.formatRupiah(used))
+                        .setPositiveButton("Oke", null)
+                        .show();
+                return;
+            }
+
+            // Cari icon kategori
+            String categoryIcon = "lainnya_out";
+            for (String[] cat : CATEGORIES) {
+                if (cat[0].equals(kategori)) { categoryIcon = cat[1]; break; }
+            }
+
+            // Catat sebagai PENGELUARAN di Realm → tampil di histori pengeluaran
+            TransactionRepository.addTransaction(
+                    userEmail,
+                    "PENGELUARAN",
+                    used,
+                    kategori,
+                    categoryIcon,
+                    getTanggalHari(),
+                    "Pemakaian budget - " + kategori
+            );
+
+            // Update catatan used di SharedPreferences
             addBudgetUsed(used);
+
             etUseBudget.setText("");
-            Toast.makeText(this, "Dana berhasil dikurangi dari budget!", Toast.LENGTH_SHORT).show();
+            spinnerKategoriBudget.setText("", false);
+            Toast.makeText(this,
+                    "Dana dipakai! Saldo berkurang " + TransactionAdapter.formatRupiah(used),
+                    Toast.LENGTH_SHORT).show();
             loadMonthData();
         });
 
-        // Reset Budget bulan ini
-        Button btnResetBudget = findViewById(R.id.btnResetBudget);
+        // ── Reset Budget ──────────────────────────────────────────────────────
         btnResetBudget.setOnClickListener(v -> {
-            new androidx.appcompat.app.AlertDialog.Builder(this)
+            new AlertDialog.Builder(this)
                     .setTitle("Reset Budget")
                     .setMessage("Reset semua data budget bulan ini ke 0?")
                     .setPositiveButton("Reset", (d, w) -> {
                         String monthKey = getMonthKey();
                         sharedPreferences.edit()
                                 .putLong("limit_" + userEmail + "_" + monthKey, 0)
-                                .putLong("used_" + userEmail + "_" + monthKey, 0)
+                                .putLong("used_"  + userEmail + "_" + monthKey, 0)
                                 .apply();
                         Toast.makeText(this, "Budget bulan ini direset!", Toast.LENGTH_SHORT).show();
                         loadMonthData();
@@ -117,20 +249,28 @@ public class BudgetActivity extends AppCompatActivity {
         loadMonthData();
     }
 
-    private String getMonthKey() {
-        SimpleDateFormat sdf = new SimpleDateFormat("MM-yyyy", Locale.getDefault());
-        return sdf.format(currentCalendar.getTime());
+    // ─── Helper tanggal ───────────────────────────────────────────────────────
+
+    private String getTanggalHari() {
+        return new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+                .format(currentCalendar.getTime());
     }
 
+    private String getMonthKey() {
+        return new SimpleDateFormat("MM-yyyy", Locale.getDefault())
+                .format(currentCalendar.getTime());
+    }
+
+    // ─── Load & render data bulan ─────────────────────────────────────────────
+
     private void loadMonthData() {
-        SimpleDateFormat sdfDisplay = new SimpleDateFormat("MMMM yyyy", new Locale("id", "ID"));
-        tvMonthYear.setText(sdfDisplay.format(currentCalendar.getTime()));
+        tvMonthYear.setText(new SimpleDateFormat("MMMM yyyy", new Locale("id", "ID"))
+                .format(currentCalendar.getTime()));
 
         String monthKey = getMonthKey();
         long limit = sharedPreferences.getLong("limit_" + userEmail + "_" + monthKey, 0);
-        long used = sharedPreferences.getLong("used_" + userEmail + "_" + monthKey, 0);
+        long used  = sharedPreferences.getLong("used_"  + userEmail + "_" + monthKey, 0);
 
-        // AUTO-HEAL: Kalau ada data minus dari error sebelumnya, paksa jadi 0
         if (used < 0) {
             used = 0;
             sharedPreferences.edit().putLong("used_" + userEmail + "_" + monthKey, 0).apply();
@@ -147,13 +287,13 @@ public class BudgetActivity extends AppCompatActivity {
         } else {
             if (sisa < 0) {
                 tvSisaBudget.setText("- " + TransactionAdapter.formatRupiah(Math.abs(sisa)));
-                tvSisaBudget.setTextColor(Color.parseColor("#EF4444")); // Merah (Over)
+                tvSisaBudget.setTextColor(Color.parseColor("#EF4444"));
             } else {
                 tvSisaBudget.setText(TransactionAdapter.formatRupiah(sisa));
-                tvSisaBudget.setTextColor(Color.parseColor("#10B981")); // Hijau (Aman)
+                tvSisaBudget.setTextColor(Color.parseColor("#10B981"));
             }
-
-            tvTerpakai.setText("Terpakai " + TransactionAdapter.formatRupiah(used) + " / " + TransactionAdapter.formatRupiah(limit));
+            tvTerpakai.setText("Terpakai " + TransactionAdapter.formatRupiah(used)
+                    + " / " + TransactionAdapter.formatRupiah(limit));
 
             progressBarBudget.setMax(100);
             int progress = (int) ((used * 100) / limit);
@@ -162,14 +302,33 @@ public class BudgetActivity extends AppCompatActivity {
         }
     }
 
+    // ─── Helpers ─────────────────────────────────────────────────────────────
+
     private void saveBudgetLimit(long limit) {
-        String monthKey = getMonthKey();
-        sharedPreferences.edit().putLong("limit_" + userEmail + "_" + monthKey, limit).apply();
+        sharedPreferences.edit()
+                .putLong("limit_" + userEmail + "_" + getMonthKey(), limit)
+                .apply();
     }
 
     private void addBudgetUsed(long amount) {
-        String monthKey = getMonthKey();
-        long currentUsed = sharedPreferences.getLong("used_" + userEmail + "_" + monthKey, 0);
-        sharedPreferences.edit().putLong("used_" + userEmail + "_" + monthKey, currentUsed + amount).apply();
+        String key     = "used_" + userEmail + "_" + getMonthKey();
+        long current   = sharedPreferences.getLong(key, 0);
+        sharedPreferences.edit().putLong(key, current + amount).apply();
+    }
+
+    /** Saldo bersih = total pemasukan - total pengeluaran dari Realm. */
+    private long getSaldoSekarang() {
+        long pemasukan   = TransactionRepository.getTotalAmount(userEmail, "PEMASUKAN");
+        long pengeluaran = TransactionRepository.getTotalAmount(userEmail, "PENGELUARAN");
+        return pemasukan - pengeluaran;
+    }
+
+    /** Tutup soft keyboard. */
+    private void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager)
+                getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null && getCurrentFocus() != null) {
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
     }
 }

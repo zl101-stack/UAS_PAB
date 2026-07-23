@@ -10,7 +10,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
 import edu.uph.m24si2.uas_pab.adapter.TransactionAdapter;
-import edu.uph.m24si2.uas_pab.db.SavingRepository;
 import edu.uph.m24si2.uas_pab.db.TransactionRepository;
 
 public class dashboard extends AppCompatActivity {
@@ -40,12 +39,10 @@ public class dashboard extends AppCompatActivity {
         userEmail       = intent.getStringExtra("USER_EMAIL");
 
         // ── Bind views header ─────────────────────────────────────────────────
-        TextView tvWelcomeName   = findViewById(R.id.tvWelcomeName);
-        TextView tvAvatarInitials = findViewById(R.id.tvAvatarInitials);
+        TextView tvWelcomeName = findViewById(R.id.tvWelcomeName);
 
         if (userNama != null && !userNama.isEmpty()) {
             tvWelcomeName.setText("Selamat Datang, " + userNama);
-            tvAvatarInitials.setText(userNama.substring(0, 1).toUpperCase());
         }
 
         // ── Bind views saldo ──────────────────────────────────────────────────
@@ -139,8 +136,7 @@ public class dashboard extends AppCompatActivity {
 
         cachedPemasukan   = TransactionRepository.getTotalAmount(userEmail, "PEMASUKAN");
         cachedPengeluaran = TransactionRepository.getTotalAmount(userEmail, "PENGELUARAN");
-        long totalTabungan = SavingRepository.getTotalSaved(userEmail);
-        cachedSaldo       = cachedPemasukan - cachedPengeluaran + totalTabungan;
+        cachedSaldo       = cachedPemasukan - cachedPengeluaran;
 
         refreshSaldoDisplay();
     }
