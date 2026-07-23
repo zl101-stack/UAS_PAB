@@ -206,10 +206,10 @@ public class BudgetActivity extends AppCompatActivity {
                 if (cat[0].equals(kategori)) { categoryIcon = cat[1]; break; }
             }
 
-            // Catat sebagai PENGELUARAN di Realm → tampil di histori pengeluaran
-            TransactionRepository.addTransaction(
+            // Catat di histori pengeluaran tapi TIDAK kurangi saldo
+            // (saldo sudah dipotong saat budget dibuat)
+            TransactionRepository.addBudgetTransaction(
                     userEmail,
-                    "PENGELUARAN",
                     used,
                     kategori,
                     categoryIcon,
@@ -217,32 +217,52 @@ public class BudgetActivity extends AppCompatActivity {
                     "Pemakaian budget - " + kategori
             );
 
-            // Update catatan used di SharedPreferences
+            // Update tracker used di SharedPreferences
             addBudgetUsed(used);
 
             etUseBudget.setText("");
             spinnerKategoriBudget.setText("", false);
             Toast.makeText(this,
-                    "Dana dipakai! Saldo berkurang " + TransactionAdapter.formatRupiah(used),
+                    "Dana dipakai! Budget berkurang " + TransactionAdapter.formatRupiah(used),
                     Toast.LENGTH_SHORT).show();
             loadMonthData();
         });
 
-        // ── Reset Budget ──────────────────────────────────────────────────────
         btnResetBudget.setOnClickListener(v -> {
+            String monthKey = getMonthKey();
+            long limit = sharedPreferences.getLong("limit_" + userEmail + "_" + monthKey, 0);
+
+            String pesan = "Reset semua data budget bulan ini ke 0?";
+            if (limit > 0) {
+                pesan = "Budget " + TransactionAdapter.formatRupiah(limit) +
+                        " akan dikembalikan penuh ke total saldo.\n\nLanjutkan reset?";
+            }
+
             new AlertDialog.Builder(this)
-                    .setTitle("Reset Budget")
-                    .setMessage("Reset semua data budget bulan ini ke 0?")
-                    .setPositiveButton("Reset", (d, w) -> {
-                        String monthKey = getMonthKey();
+                    .setTitle("Reset Budget?")
+                    .setMessage(pesan)
+                    .setPositiveButton("Ya", (d, w) -> {
+                        String bulanTahun = new SimpleDateFormat("MMMM yyyy",
+                                new Locale("id", "ID")).format(currentCalendar.getTime());
+
+                        // Hapus histori pengeluaran budget bulan ini
+                        // Saldo otomatis kembali karena pengeluarannya dihapus
+                        TransactionRepository.deleteBudgetTransactions(userEmail, bulanTahun);
+
+                        // Reset data SharedPreferences
                         sharedPreferences.edit()
                                 .putLong("limit_" + userEmail + "_" + monthKey, 0)
                                 .putLong("used_"  + userEmail + "_" + monthKey, 0)
                                 .apply();
-                        Toast.makeText(this, "Budget bulan ini direset!", Toast.LENGTH_SHORT).show();
+
+                        Toast.makeText(this,
+                                limit > 0
+                                        ? "Budget direset! Dana " + TransactionAdapter.formatRupiah(limit) + " telah dikembalikan ke saldo."
+                                        : "Budget bulan ini direset!",
+                                Toast.LENGTH_LONG).show();
                         loadMonthData();
                     })
-                    .setNegativeButton("Batal", null)
+                    .setNegativeButton("Tidak", null)
                     .show();
         });
 

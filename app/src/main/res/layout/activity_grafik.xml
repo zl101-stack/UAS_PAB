@@ -169,6 +169,64 @@
                 app:tabRippleColor="@android:color/transparent"
                 android:elevation="2dp"/>
 
+            <!-- KARTU PIE CHART KATEGORI -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="16dp"
+                app:cardBackgroundColor="#FFFFFF"
+                app:cardElevation="3dp"
+                android:layout_marginBottom="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Distribusi Kategori"
+                        android:textColor="#1E293B"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="8dp"/>
+
+                    <!-- Tab Pemasukan / Pengeluaran -->
+                    <com.google.android.material.tabs.TabLayout
+                        android:id="@+id/tabPieType"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="12dp"
+                        app:tabMode="fixed"
+                        app:tabGravity="fill"
+                        app:tabSelectedTextColor="#FFFFFF"
+                        app:tabTextColor="#94A3B8"
+                        app:tabIndicatorColor="@android:color/transparent"
+                        app:tabBackground="@android:color/transparent"
+                        app:tabRippleColor="@android:color/transparent"
+                        android:background="#F1F5F9"
+                        app:tabIndicatorFullWidth="false"/>
+
+                    <!-- Pie Chart -->
+                    <com.github.mikephil.charting.charts.PieChart
+                        android:id="@+id/pieChart"
+                        android:layout_width="match_parent"
+                        android:layout_height="260dp"
+                        android:layout_marginBottom="12dp"/>
+
+                    <!-- Legend custom -->
+                    <LinearLayout
+                        android:id="@+id/llPieLegend"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:paddingTop="4dp"/>
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
             <!-- KARTU GRAFIK BATANG -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"

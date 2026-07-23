@@ -32,6 +32,8 @@ public class Transaction extends RealmObject {
 
     private long createdAt;     // Timestamp pembuatan (epoch millis)
 
+    private boolean isBudgetUsage; // true = dari pemakaian budget, tidak mempengaruhi saldo
+
     // Constructor kosong wajib untuk Realm
     public Transaction() {}
 
@@ -77,4 +79,7 @@ public class Transaction extends RealmObject {
 
     public long   getCreatedAt()                    { return createdAt; }
     public void   setCreatedAt(long createdAt)      { this.createdAt = createdAt; }
+
+    public boolean isBudgetUsage()                          { return isBudgetUsage; }
+    public void    setBudgetUsage(boolean isBudgetUsage)    { this.isBudgetUsage = isBudgetUsage; }
 }

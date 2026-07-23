@@ -125,6 +125,94 @@ public class TransactionRepository {
     }
 
     /**
+     * Menyimpan transaksi pemakaian budget — tercatat di histori tapi tidak mempengaruhi saldo.
+     */
+    public static void addBudgetTransaction(String userEmail, long amount,
+                                             String category, String categoryIcon,
+                                             String date, String notes) {
+        Realm realm = Realm.getDefaultInstance();
+        try {
+            realm.executeTransaction(r -> {
+                Transaction t = new Transaction(
+                        UUID.randomUUID().toString(),
+                        userEmail, "PENGELUARAN", amount,
+                        category, categoryIcon, date, notes,
+                        System.currentTimeMillis()
+                );
+                t.setBudgetUsage(true); // tandai sebagai budget usage
+                r.insertOrUpdate(t);
+            });
+        } finally {
+            realm.close();
+        }
+    }
+
+    /**
+     * Menghapus semua transaksi budget (PENGELUARAN dengan notes mengandung bulan tertentu
+     * dan PEMASUKAN "Pengembalian Budget") untuk bulan tertentu.
+     * Dipanggil saat reset budget.
+     */
+    public static void deleteBudgetTransactions(String userEmail, String bulanTahun) {
+        Realm realm = Realm.getDefaultInstance();
+        try {
+            realm.executeTransaction(r -> {
+                // Hapus pengeluaran budget bulan ini (dicatat saat set budget)
+                RealmResults<Transaction> pengeluaranBudget = r.where(Transaction.class)
+                        .equalTo("userEmail", userEmail)
+                        .equalTo("type", "PENGELUARAN")
+                        .equalTo("category", "Budget")
+                        .contains("notes", bulanTahun)
+                        .findAll();
+                pengeluaranBudget.deleteAllFromRealm();
+
+                // Hapus SEMUA pemakaian budget (isBudgetUsage = true) milik user ini
+                RealmResults<Transaction> pemakaianBudget = r.where(Transaction.class)
+                        .equalTo("userEmail", userEmail)
+                        .equalTo("isBudgetUsage", true)
+                        .findAll();
+                pemakaianBudget.deleteAllFromRealm();
+            });
+        } finally {
+            realm.close();
+        }
+    }
+
+    /**
+     * Menghapus semua transaksi tabungan berdasarkan targetId di notes.
+     * Dipanggil saat target tabungan dihapus agar saldo kembali.
+     */
+    public static void deleteSavingTransactions(String userEmail, String targetId) {
+        // Ambil nama target dulu untuk filter notes
+        String namaTarget;
+        Realm realmCheck = Realm.getDefaultInstance();
+        try {
+            io.realm.RealmObject t = realmCheck.where(
+                    edu.uph.m24si2.uas_pab.model.SavingTarget.class)
+                    .equalTo("id", targetId).findFirst();
+            namaTarget = t != null
+                    ? ((edu.uph.m24si2.uas_pab.model.SavingTarget) t).getNamaTarget()
+                    : targetId;
+        } finally {
+            realmCheck.close();
+        }
+
+        final String finalNama = namaTarget;
+        Realm realm = Realm.getDefaultInstance();
+        try {
+            realm.executeTransaction(r -> {
+                RealmResults<Transaction> results = r.where(Transaction.class)
+                        .equalTo("userEmail", userEmail)
+                        .equalTo("category", "Tabungan")
+                        .contains("notes", finalNama)
+                        .findAll();
+                results.deleteAllFromRealm();
+            });
+        } finally {
+            realm.close();
+        }
+    }
+
+    /**
      * Menghitung total jumlah transaksi berdasarkan user dan tipe.
      *
      * @param userEmail Email pemilik
@@ -137,6 +225,7 @@ public class TransactionRepository {
             Number total = realm.where(Transaction.class)
                     .equalTo("userEmail", userEmail)
                     .equalTo("type", type)
+                    .equalTo("isBudgetUsage", false) // skip budget usage
                     .sum("amount");
             return total != null ? total.longValue() : 0L;
         } finally {
@@ -295,5 +384,28 @@ public class TransactionRepository {
             realm.close();
         }
         return result;
+    }
+
+    /**
+     * Menghitung total per kategori untuk tipe tertentu.
+     * Digunakan untuk Pie Chart di GrafikActivity.
+     */
+    public static Map<String, Long> getCategoryData(String userEmail, String type) {
+        Realm realm = Realm.getDefaultInstance();
+        try {
+            RealmResults<Transaction> results = realm.where(Transaction.class)
+                    .equalTo("userEmail", userEmail)
+                    .equalTo("type", type)
+                    .findAll();
+
+            Map<String, Long> map = new LinkedHashMap<>();
+            for (Transaction t : results) {
+                String cat = t.getCategory();
+                map.put(cat, map.containsKey(cat) ? map.get(cat) + t.getAmount() : t.getAmount());
+            }
+            return map;
+        } finally {
+            realm.close();
+        }
     }
 }

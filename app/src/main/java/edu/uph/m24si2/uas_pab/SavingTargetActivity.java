@@ -88,9 +88,23 @@ public class SavingTargetActivity extends AppCompatActivity {
         card.findViewById(R.id.btnHapus).setOnClickListener(v ->
                 new AlertDialog.Builder(this)
                         .setTitle("Hapus Target")
-                        .setMessage("Hapus target \"" + target.getNamaTarget() + "\"?")
+                        .setMessage("Hapus target \"" + target.getNamaTarget() + "\"?\n\n" +
+                                "Dana yang sudah disetorkan (" +
+                                TransactionAdapter.formatRupiah(target.getSavedAmount()) +
+                                ") akan dikembalikan ke saldo.")
                         .setPositiveButton("Hapus", (d, w) -> {
+                            // 1. Hapus transaksi PENGELUARAN tabungan → saldo otomatis kembali
+                            TransactionRepository.deleteSavingTransactions(
+                                    userEmail, target.getId());
+
+                            // 2. Hapus target dari Realm
                             SavingRepository.deleteTarget(target.getId());
+
+                            Toast.makeText(this,
+                                    "Target dihapus! Dana " +
+                                    TransactionAdapter.formatRupiah(target.getSavedAmount()) +
+                                    " dikembalikan ke saldo.",
+                                    Toast.LENGTH_SHORT).show();
                             loadTargets();
                         })
                         .setNegativeButton("Batal", null)
