@@ -20,3 +20,5 @@ Cara menjalankan aplikasi :
 9. terdapat fitur notifikasi, sehingga pengguna mendapatkan notifikasi.
 10. terdapat fitur profile, pilih fitur profile jika pengguna ingin mengedit informasi tetang akun.
 11. terdapat fitur video edukasi, pilih fitur tersebut jika pengguna ingin menambah pengetahuan tentang keuangan.
+
+link video revisi aplikasi : https://youtube.com/shorts/1vchz_mCtBk?feature=share
